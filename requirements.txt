@@ -1,0 +1,4 @@
+win11toast
+aiohttp
+pyautogui
+python-socketio
