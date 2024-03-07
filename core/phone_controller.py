@@ -25,7 +25,6 @@ class PhoneController:
 
         @sio.event
         async def connect(sid, environ):
-
             # Disconnect blacklisted IPs.
             if environ["REMOTE_ADDR"] in self.blacklisted_ips:
                 await sio.disconnect(sid)
@@ -35,6 +34,9 @@ class PhoneController:
             if self.authorized_sid == "" and await Toasts.askForPin(title="Controller request",
                                                                     description="Please enter the PIN code provided on your phone's screen to confirm.",
                                                                     pin=environ["HTTP_PIN"]):
+                if environ["REMOTE_ADDR"] in self.warned_ips:
+                    self.warned_ips.remove(environ["REMOTE_ADDR"])
+                
                 self.authorized_sid = sid
                 asyncio.create_task(Toasts.rawToast("Palm is connected to your phone", "Palm is ready to receive inputs from your phone."))
                 await sio.emit("authorized", to=sid)
