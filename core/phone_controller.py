@@ -12,7 +12,7 @@ class PhoneController:
     interface = "0.0.0.0"
     port = 45784
 
-    allowed_inputs = ["left", "right", "shift+f5", "f5", "esc"]
+    allowed_inputs = ["left", "right", "shiftf5", "f5", "esc"]
 
     def __init__(self, interface: str, port: int):
         self.interface = interface
@@ -54,7 +54,7 @@ class PhoneController:
         async def key(sid, data):
             # Receive input from app, if a unknown request is sent, remove it from the socket.
             if sid == self.authorized_sid and data in self.allowed_inputs:
-                pyautogui.press(data) if data != "shift+f5" else pyautogui.hotkey("shift", "f5")
+                pyautogui.press(data) if data != "shiftf5" else pyautogui.hotkey("shift", "f5")
             else:
                 await sio.disconnect(sid)
 
